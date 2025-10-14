@@ -4,6 +4,7 @@
 * Author: Aden Yance
 * Date: 9/30/2025
 * compile with a Makefile then ./vectorlab
+Changing it for the github
 */
 
 #include <stdio.h>

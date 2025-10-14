@@ -28,10 +28,9 @@
  Vector addvec(Vector A, Vector B);
  Vector subvec(Vector A, Vector B);
  Vector ScMultiVec(Vector A, float scalar);  // scalar multiply
- Vector CrMultiVec(Vector A, Vector B);      // extra credit: cross multiply
- float  DoMultiVec(Vector A, Vector B);      // extra credit: dot multiply
- 
+
  // Helper Functions 
+ void save(void):
  void help(void);
  void clear(void);
  void list(void);

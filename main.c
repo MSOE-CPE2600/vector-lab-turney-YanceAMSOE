@@ -153,23 +153,6 @@ int main(void) {
                     }
                 }
 
-                 /* Plain operation: Cross and dot product command
-                 else if (sscanf(line, " %29s %c %29s %c", Aname, &op, Bname, &extra2) == 3 &&
-                 (op == '*' || op == 'x')) {
-            int ia = findVect(Aname);
-            int ib = findVect(Bname);
-            if (ia < 0 || ib < 0) {
-                printf("Unknown vector.\n");
-            } else {
-                Vector R;
-                if (op == '*')
-                    R = DoMultiVec(myVector[ia], myVector[ib]);
-                else
-                    R = CrMultiVec(myVector[ia], myVector[ib]);
-                printf("ans = %.3f %.3f %.3f\n", R.x, R.y, R.z);
-            }
-        } */
-
                 // Display a vector: name command
                 else if (sscanf(line, " %29s %c", Aname, &extra2) == 1) {
                     int ia = findVect(Aname);
@@ -179,6 +162,12 @@ int main(void) {
                         Vector V = myVector[ia];
                         printf("%s = %.3f %.3f %.3f\n", Aname, V.x, V.y, V.z);
                     }
+                }
+
+                // Save a file
+                else if (sscanf(line, "save %s", Fname) == 0) {
+                    save(Fname);
+                    
                 }
 
                 // Error message

@@ -8,6 +8,7 @@
  #include <stdio.h>
  #include <string.h>
  #include <stdbool.h>
+ #include <stdlib.h>
  #include "vect.h"
  
  // Global storage
@@ -39,18 +40,7 @@
      return result;
  }
  
- // Extra credit (optional)
- Vector CrMultiVec(Vector A, Vector B) {
-     Vector result;
-     result.x = A.y * B.z - A.z * B.y;
-     result.y = A.z * B.x - A.x * B.z;
-     result.z = A.x * B.y - A.y * B.x;
-     return result;
- }
- 
- float DoMultiVec(Vector A, Vector B) {
-     return A.x * B.x + A.y * B.y + A.z * B.z;
- }
+
  
  // Storage / Helpers
  
@@ -67,13 +57,12 @@
      printf("  c = a + b             Store the sum of a and b in vector c.\n");
      printf("  c = a - b             Store the difference of a and b in vector c.\n");
      printf("  c = a * s  or  c = s * a   Store a scaled vector result in c.\n");
-    // printf("  c = a x b             Store the cross product of a and b in vector c.\n");
-    // printf("  c = a * b             Store the dot product of a and b in vector c.\n\n");
  
      printf("Other commands:\n");
      printf("  list                  Display all currently stored vectors.\n");
      printf("  clear                 Delete all stored vectors.\n");
      printf("  quit                  Exit the program.\n");
+     printf("  save                  Saves all the current vectors to a CSV File \n");
      printf("  -h                    Show this help message again.\n\n");
  }
  
@@ -102,6 +91,19 @@
      if (!any) {
          printf("No vectors stored.\n");
      }
+
+     //Saves the current vectors to a file
+ }
+ void save(String Fname){
+    FILE *file_ptr;
+    
+    file_ptr = fopen(Fname, "w");
+    for (int i = 0; i < MAX_VECTORS; i++) { // have to change the max vectors for dynamic memory 
+    fprintf(file_ptr, "Vector Name, x value, y value, and z value \n")
+    fprintf(file_ptr, "%s, %.3f, %.3f, %.3f\n", myVector[i].name, myVector[i].x, myVector[i].y, myVector[i].z);
+    }
+    fclose(file_ptr);
+
  }
  
  int newVect(const char* name, float x, float y, float z) {

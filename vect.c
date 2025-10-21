@@ -91,13 +91,13 @@
      if (!any) {
          printf("No vectors stored.\n");
      }
-
-     //Saves the current vectors to a file
  }
+
+ //Saves the current vectors to a file
  void save(String Fname){
     FILE *file_ptr;
     
-    file_ptr = fopen(Fname, "w");
+    file_ptr = fopen(Fname, "w"); //uses the input given in main as the file name
     for (int i = 0; i < MAX_VECTORS; i++) { // have to change the max vectors for dynamic memory 
     fprintf(file_ptr, "Vector Name, x value, y value, and z value \n")
     fprintf(file_ptr, "%s, %.3f, %.3f, %.3f\n", myVector[i].name, myVector[i].x, myVector[i].y, myVector[i].z);

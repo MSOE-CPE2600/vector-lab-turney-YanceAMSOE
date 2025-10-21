@@ -2,7 +2,7 @@
 * Filename: main.c
 * Description: Does operations with vectors
 * Author: Aden Yance
-* Date: 9/30/2025
+* Date: 10/14/2025
 * compile with a Makefile then ./vectorlab
 Changing it for the github
 */
@@ -165,9 +165,10 @@ int main(void) {
                 }
 
                 // Save a file
-                else if (sscanf(line, "save %s", Fname) == 0) {
+                else if (sscanf(line, "save %s", Fname) == 1) {
+                    printf("in order to save a file please input a name without spaces")
+                } else {
                     save(Fname);
-                    
                 }
 
                 // Error message
@@ -179,4 +180,5 @@ int main(void) {
         printf("VectorLab>");
     }
     return 0;
+   // atexit() clear all memory 
 }

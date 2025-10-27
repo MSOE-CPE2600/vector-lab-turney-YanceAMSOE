@@ -2,7 +2,7 @@
 * Filename: main.c
 * Description: Does operations with vectors
 * Author: Aden Yance
-* Date: 10/14/2025
+* Date: 10/21/2025
 * compile with a Makefile then ./vectorlab
 Changing it for the github
 */
@@ -12,10 +12,17 @@ Changing it for the github
 #include <stdbool.h>
 #include <stdlib.h>
 #include "vect.h"
+#include "DM.h"
 
 int main(void) {
     char line[250];
     bool running = true;
+
+    // Initialize dynamic memory storage
+    if (!init_vector_storage(10)) {
+        printf("Error: Failed to initialize vector storage\n");
+        return 1;
+    }
 
     printf("Vector Calculator ready.\n");
     printf("Type -h for a list of commands\n");
@@ -49,6 +56,39 @@ int main(void) {
         // Clear memory command
         else if (strcmp(line, "clear") == 0) {
             clear();
+        }
+
+        // Save command
+        else if (strcmp(line, "save") == 0) {
+            printf("Enter filename to save vectors (or press Enter for default 'vectors.csv'): ");
+            char save_filename[100];
+            if (fgets(save_filename, sizeof(save_filename), stdin)) {
+                // Remove newline
+                save_filename[strcspn(save_filename, "\n")] = '\0';
+                
+                // Use default if empty
+                if (strlen(save_filename) == 0) {
+                    strcpy(save_filename, "vectors.csv");
+                }
+                
+                save(save_filename);
+            }
+        }
+
+        // Load command
+        else if (strcmp(line, "load") == 0) {
+            printf("Enter filename to load vectors from: ");
+            char load_filename[100];
+            if (fgets(load_filename, sizeof(load_filename), stdin)) {
+                // Remove newline
+                load_filename[strcspn(load_filename, "\n")] = '\0';
+                
+                if (strlen(load_filename) > 0) {
+                    loadVect(load_filename);
+                } else {
+                    printf("Error: No filename provided\n");
+                }
+            }
         }
 
         // Assignment: name = x y z command    
@@ -164,12 +204,6 @@ int main(void) {
                     }
                 }
 
-                // Save a file
-                else if (sscanf(line, "save %s", Fname) == 1) {
-                    printf("in order to save a file please input a name without spaces")
-                } else {
-                    save(Fname);
-                }
 
                 // Error message
                 else {
@@ -177,8 +211,11 @@ int main(void) {
                 }
             }
         }
-        printf("VectorLab>");
+        printf("VectorLab> ");
     }
+    
+    // Clean up dynamic memory before exiting
+    cleanup_vector_storage();
+    printf("\nGoodbye!\n");
     return 0;
-   // atexit() clear all memory 
 }

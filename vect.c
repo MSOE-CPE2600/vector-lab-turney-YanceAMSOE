@@ -2,7 +2,7 @@
  * Filename: vect.c
  * Description: Defines the functions used to make and operate vectors
  * Author: Aden Yance
- * Date: 9/30/2025
+ * Date: 10/21/2025
  */
 
  #include <stdio.h>
@@ -10,9 +10,7 @@
  #include <stdbool.h>
  #include <stdlib.h>
  #include "vect.h"
- 
- // Global storage
- Vector myVector[MAX_VECTORS];
+ #include "DM.h"
  
  // Math Functions
  
@@ -61,85 +59,52 @@
      printf("Other commands:\n");
      printf("  list                  Display all currently stored vectors.\n");
      printf("  clear                 Delete all stored vectors.\n");
-     printf("  quit                  Exit the program.\n");
      printf("  save                  Saves all the current vectors to a CSV File \n");
+     printf("  load                  Load vectors from a CSV File \n");
+     printf("  quit                  Exit the program.\n");
      printf("  -h                    Show this help message again.\n\n");
  }
  
  void clear(void) {
-     for (int i = 0; i < MAX_VECTORS; i++) {
-         myVector[i].in_use = false;
-         myVector[i].name[0] = '\0';
-         myVector[i].x = 0;
-         myVector[i].y = 0;
-         myVector[i].z = 0;
-     }
+     clear_vectors_dynamic();
  }
  
  void list(void) {
-     bool any = false;
-     for (int i = 0; i < MAX_VECTORS; i++) {
-         if (myVector[i].in_use) {
-             printf("%s = %.3f %.3f %.3f\n",
-                    myVector[i].name,
-                    myVector[i].x,
-                    myVector[i].y,
-                    myVector[i].z);
-             any = true;
-         }
-     }
-     if (!any) {
-         printf("No vectors stored.\n");
-     }
+     list_vectors_dynamic();
  }
 
  //Saves the current vectors to a file
- void save(String Fname){
+ void save(const char* filename){
     FILE *file_ptr;
     
-    file_ptr = fopen(Fname, "w"); //uses the input given in main as the file name
-    for (int i = 0; i < MAX_VECTORS; i++) { // have to change the max vectors for dynamic memory 
-    fprintf(file_ptr, "Vector Name, x value, y value, and z value \n")
-    fprintf(file_ptr, "%s, %.3f, %.3f, %.3f\n", myVector[i].name, myVector[i].x, myVector[i].y, myVector[i].z);
+    file_ptr = fopen(filename, "w"); //uses the input given in main as the file name
+    if (file_ptr == NULL) {
+        printf("Error: Could not create file %s\n", filename);
+        return;
+    }
+    
+    fprintf(file_ptr, "Vector Name, x value, y value, z value\n");
+    for (int i = 0; i < vector_count; i++) {
+        if (myVector[i].in_use) {
+            fprintf(file_ptr, "%s, %.3f, %.3f, %.3f\n",  //the .3 save it to 3 decimal spots
+                    myVector[i].name, myVector[i].x, myVector[i].y, myVector[i].z);
+        }
     }
     fclose(file_ptr);
-
+    printf("Vectors saved to %s\n", filename);
  }
  
  int newVect(const char* name, float x, float y, float z) {
-     // replace if exists
-     for (int i = 0; i < MAX_VECTORS; i++) {
-         if (myVector[i].in_use && strcmp(myVector[i].name, name) == 0) {
-             myVector[i].x = x;
-             myVector[i].y = y;
-             myVector[i].z = z;
-             return 1;  // Vector is replaced
-         }
-     }
- 
-     // add to first empty slot
-     for (int i = 0; i < MAX_VECTORS; i++) {
-         if (!myVector[i].in_use) {
-             myVector[i].in_use = true;
-             strncpy(myVector[i].name, name, NAME_LEN - 1);
-             myVector[i].name[NAME_LEN - 1] = '\0';
-             myVector[i].x = x;
-             myVector[i].y = y;
-             myVector[i].z = z;
-             return 2;  // Vector is added
-         }
-     }
- 
-     return 0;  // Vector Array is full
+     return add_vector_dynamic(name, x, y, z);
  }
  
  int findVect(const char* name) {
-     for (int i = 0; i < MAX_VECTORS; i++) {
-         if (myVector[i].in_use && strcmp(myVector[i].name, name) == 0) {
-             return i;  // Vector is found
-         }
-     }
-     return -1;  // Vector is not found
+     return find_vector_dynamic(name);
+ }
+
+ // Load vectors from file
+ int loadVect(const char* filename) {
+     return load_vectors_from_file(filename);
  }
  
  bool quit(const char* argument ) {

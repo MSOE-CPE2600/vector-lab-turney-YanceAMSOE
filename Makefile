@@ -1,11 +1,11 @@
 CC = gcc
 CFLAGS = -c -Wall
 LDFLAGS = 
-SOURCES = main.c vect.c
+SOURCES = main.c vect.c DM.c
 OBJECTS = $(SOURCES:.c=.o)
 EXECUTABLE = VectorLab
 
-all: $(Sources) $(EXECUTABLE)
+all: $(SOURCES) $(EXECUTABLE)
 
 # pull in dependency infor for *existing* .o files
 -include $(OBJECTS:.o=.d)

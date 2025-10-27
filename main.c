@@ -5,6 +5,7 @@
 * Date: 10/21/2025
 * compile with a Makefile then ./vectorlab
 Changing it for the github
+also use valgrind for it
 */
 
 #include <stdio.h>

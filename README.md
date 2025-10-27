@@ -19,7 +19,6 @@ make
 ```sh
 gcc -o vectorlab vect.c DM.c
 ```
-*(Omit `DM.c` if not using dynamic memory utilities.)*
 
 ---
 
